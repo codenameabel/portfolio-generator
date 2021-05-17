@@ -1,9 +1,8 @@
-const { link } = require('fs');
+const fs = require('fs');
 const inquirer = require('inquirer');
-// const { type } = require('os');
-//const fs = require('fs');
-//const generatePage = require('./src/page-template.js');
+const generatePage = require('./src/page-template.js');
 
+// const { type } = require('os');
 //const pageHTML = generatePage(name, github); 
 
 //fs.writeFile('index.html', pageHTML, err => {
@@ -62,7 +61,7 @@ const promptUser = () => {
 };
 
 const promptProject = portfolioData => {  
-console.log(`
+  console.log(`
   =================
   Add a New Project
   =================
@@ -71,7 +70,7 @@ console.log(`
 // If there's no 'projects' array property, create one
 if (!portfolioData.projects) {
       portfolioData.projects = [];
-        }
+}
     return inquirer
     .prompt([
       {
@@ -144,9 +143,14 @@ if (!portfolioData.projects) {
             });
   };
   
+promptUser()
+.then(promptProject)
+.then(portfolioData => {
+  const pageHTML = generatePage(portfolioData); 
 
-  promptUser()
-  .then(promptProject)
-  .then(portfolioData => {
-    console.log(portfolioData);
+    fs.writeFile('index.html', pageHTML, err => {
+       if (err) throw err; 
+
+       console.log('Portfolio complete! Check out index.html to see output!');
+     });
   });
